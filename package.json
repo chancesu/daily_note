@@ -1,9 +1,9 @@
 {
-  "name": "react-next-setting",
+  "name": "daily_note",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/smokerJS/react-next-setting.git",
-  "author": "“Jung, <“smokerjs@stunitas.com>",
+  "repository": "https://github.com/chancesu/daily_note.git",
+  "author": "“chloe.lee, <“chancesu7@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "next"
