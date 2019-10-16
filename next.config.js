@@ -18,14 +18,35 @@ const NextAppConfig = {
         config.module.rules = [
             ...config.module.rules,
             ...[{
-                test: /\.(png|woff|woff2|eot|ttf|gif|jpg|ico|svg)$/,
-                loader: 'file-loader',
-                options: {
-                name: '[name]_[hash].[ext]',
-                publicPath: `/_next/static/files`,
-                outputPath: 'static/files'
+                    test: /\.js$/,
+                    loader: 'eslint-loader',
+                    exclude: ['/node_modules/', '/.next/', '/out/'],
+                    enforce: 'pre',
+                    options: {
+                        emitWarning: true,
+                    },
+                },{
+                    test: /\.(png|woff|woff2|eot|ttf|gif|jpg|ico|svg)$/,
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name]_[hash].[ext]',
+                        publicPath: `/_next/static/files`,
+                        outputPath: 'static/files'
+                    }
+                },{
+                    test: /\.scss$/,
+                    use: [
+                        'sass-loader',
+                        {
+                            loader: 'sass-resources-loader',
+                            options: {
+                                resources: [path.join(__dirname, 'assets/styles/common/*.scss')]
+                            }
+                        }
+                    ],
                 }
-            }]
+                
+            ]
         ]
         return config;
     },
@@ -34,6 +55,6 @@ const NextAppConfig = {
 
 /* Export declaration */
 module.exports = withPlugins([ 
-  [ withCSS ],
-  [ withSass ],
+    [ withCSS ],
+    [ withSass ], 
 ], NextAppConfig );
