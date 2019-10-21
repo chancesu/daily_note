@@ -1,0 +1,84 @@
+.calendar-title{
+  padding:10px;
+  text-align:right;
+  button{
+    border:0;
+    color:#000;
+    margin:0 3px;
+    padding:10px 5px;
+    &:hover{
+      background:#ededed;
+    }
+  }
+}
+.calendar-wrap{
+  margin:0 auto;
+  width:100%;
+  border:1px solid #ddd;
+  .calendar-header,
+  .calendar-body{
+    display:grid;
+    grid-template-columns: repeat(7, 5fr);
+  }
+  .calendar-header{
+    border-bottom:1px solid #ddd;
+    margin-bottom:5px;
+    div.day{
+      height:20px;
+      padding:5px;
+      font-size: 11px;
+      text-align:center;
+      line-height:20px;
+    }
+  }
+  .calendar-body{
+    grid-auto-rows: 70px;
+    div.day{
+     position: relative;
+     border:1px solid #ddd;
+     border-width: 0 0;
+     span{
+       position:absolute;
+       top:5px;
+       left:5px;
+       font-family: Verdana;
+       font-size: 11px;
+     }
+     &.active {
+       span{
+         &:after{
+           content:"today";
+           overflow:hidden;
+           display: inline-block;
+           width:10px;
+           height:10px;
+           margin-left:5px;
+           border-radius: 50%;
+           background:#5ab4cc;
+           line-height:9;
+           vertical-align: middle;
+         }
+       }
+     }
+     &:nth-child(7n){
+      span{
+        color: rgba(0,0,0,.7);
+      }
+     }
+     &:nth-child(7n+1){
+      span{
+        color: rgba(0,0,0,.5);
+      }
+     }
+
+     &:hover{
+      &.active{
+        span:after{
+          overflow:visible;
+          line-height:3;
+        }
+      }
+     }
+   }
+  }
+}
