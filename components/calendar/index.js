@@ -1,15 +1,16 @@
 import React from 'react';
-import Day from '@/calendar/Day.js';
+import Day from '@/calendar/Day';
 // useState 앞으로 변경될 값 선언
 // --------> 랜더링
 // useEffect 값이 변경된 이후 실행될 행동 정의
 const Index = () => {
+  const getToday = new Date();
   const today = {
-    y: new Date().getFullYear(),
-    m: new Date().getMonth() + 1,
-    d: new Date().getDate(),
-  }
-  let currentDay = new Date();
+    y: getToday.getFullYear(),
+    m: getToday.getMonth() + 1,
+    d: getToday.getDate(),
+  };
+  const currentDay = new Date();
   const dayList = [];
   const [date, setDate] = React.useState(currentDay);
   const week = ['일', '월', '화', '수', '목', '금', '토'];
@@ -20,23 +21,21 @@ const Index = () => {
   };
   const firstDay = new Date(currentModule.y, currentModule.m - 1, 1).getDay();
   const lastDay = new Date(currentModule.y, currentModule.m, 0).getDate();
-  const todayActive = (item) =>{
-    return item === today.d && currentModule.m === today.m && currentModule.y === today.y;
-  }
-  const prevMonth = ()=>{
-    let settingMonth ;
-    (currentModule.m-1 == 0)?
-      settingMonth = `${currentModule.y-1} 12` :
-      settingMonth = `${currentModule.y} ${currentModule.m-1}`;
+  const todayActive = (item) => item === today.d && currentModule.m === today.m && currentModule.y === today.y;
+  const prevMonth = () => {
+    let settingMonth;
+    (currentModule.m - 1 === 0)
+      ? settingMonth = `${currentModule.y - 1} 12`
+      : settingMonth = `${currentModule.y} ${currentModule.m - 1}`;
     return setDate(new Date(settingMonth));
-  }
-  const nextMonth = ()=>{
-    let settingMonth ;
-    (currentModule.m+1 == 13)?
-      settingMonth = `${currentModule.y+1} 1` :
-      settingMonth = `${currentModule.y} ${currentModule.m+1}`;
+  };
+  const nextMonth = () => {
+    let settingMonth;
+    (currentModule.m + 1 === 13)
+      ? settingMonth = `${currentModule.y + 1} 1`
+      : settingMonth = `${currentModule.y} ${currentModule.m + 1}`;
     return setDate(new Date(settingMonth));
-  }
+  };
   for (let d = 1; d <= lastDay; d++) {
     dayList.push(d);
   }

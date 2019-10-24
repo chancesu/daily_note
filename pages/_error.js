@@ -1,9 +1,6 @@
 import React from 'react';
+const RootError = ({ statusCode }) => (
+  <div>{statusCode}</div>
+);
 
-
-export default class RootError extends React.Component {
-    render() {
-        const { statusCode } = this.props;
-        return (<div>{statusCode}</div>)
-    }
-}
+export default RootError;
