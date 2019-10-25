@@ -12,7 +12,19 @@ export default class Index extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.settingCalendar();
+  }
+
   settingCalendar() {
+    const dayItem = this.settingCompute();
+    this.setState({
+      dayList: dayItem[0],
+      currentDay: dayItem[1]
+    });
+  }
+
+  settingCompute() {
     const dayList = [];
     const currentModule = {
       y: this.state.currentDay.getFullYear(),
@@ -30,45 +42,19 @@ export default class Index extends React.Component {
     return [dayList, currentModule];
   }
 
-  todayActive(item) {
-    const today = {
-      y: this.state.getToday.getFullYear(),
-      m: this.state.getToday.getMonth() + 1,
-      d: this.state.getToday.getDate(),
-    };
-    return item === today.d && this.state.currentDay.m === today.m && this.state.currentDay.y === today.y;
-  }
-
-  componentDidMount() {
-    console.log('componentDidMount');
-    const dayItem = this.settingCalendar();
-    this.setState({
-      dayList: dayItem[0],
-      currentDay: dayItem[1]
-    });
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('shouldComponentUpdate');
-    return true / false;
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate');
-  }
-
   prevMonth = () => {
     let settingMonth;
     (this.state.currentDay.m - 1 === 0)
       ? settingMonth = `${this.state.currentDay.y - 1} 12`
       : settingMonth = `${this.state.currentDay.y} ${this.state.currentDay.m - 1}`;
-    let getMonth = new Date(settingMonth);
+    const getMonth = new Date(settingMonth);
     const getModule = {
       y: getMonth.getFullYear(),
       m: getMonth.getMonth() + 1,
       d: getMonth.getDate(),
     };
-    this.setState(() => ({ currentDay: getModule }));
+    this.setState({ currentDay: getModule });
+    this.settingCalendar();
   }
 
   nextMonth = () => {
@@ -76,13 +62,23 @@ export default class Index extends React.Component {
     (this.state.currentDay.m + 1 === 13)
       ? settingMonth = `${this.state.currentDay.y + 1} 1`
       : settingMonth = `${this.state.currentDay.y} ${this.state.currentDay.m + 1}`;
-    let getMonth = new Date(settingMonth);
+    const getMonth = new Date(settingMonth);
     const getModule = {
       y: getMonth.getFullYear(),
       m: getMonth.getMonth() + 1,
       d: getMonth.getDate(),
     };
-    this.setState(() => ({ currentDay: getModule }));
+    this.setState({ currentDay: getModule });
+    this.settingCalendar();
+  }
+
+  todayActive(item) {
+    const today = {
+      y: this.state.getToday.getFullYear(),
+      m: this.state.getToday.getMonth() + 1,
+      d: this.state.getToday.getDate(),
+    };
+    return item === today.d && this.state.currentDay.m === today.m && this.state.currentDay.y === today.y;
   }
 
   render() {
