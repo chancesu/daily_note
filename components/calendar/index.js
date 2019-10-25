@@ -1,77 +1,115 @@
 import React from 'react';
 import Day from '@/calendar/Day';
-// useState 앞으로 변경될 값 선언
-// --------> 랜더링
-// useEffect 값이 변경된 이후 실행될 행동 정의
-const Index = () => {
-  const getToday = new Date();
-  const today = {
-    y: getToday.getFullYear(),
-    m: getToday.getMonth() + 1,
-    d: getToday.getDate(),
-  };
-  const currentDay = new Date();
-  const dayList = [];
-  const [date, setDate] = React.useState(currentDay);
-  const week = ['일', '월', '화', '수', '목', '금', '토'];
-  const currentModule = {
-    y: date.getFullYear(),
-    m: date.getMonth() + 1,
-    d: date.getDate(),
-  };
-  const firstDay = new Date(currentModule.y, currentModule.m - 1, 1).getDay();
-  const lastDay = new Date(currentModule.y, currentModule.m, 0).getDate();
-  const todayActive = (item) => item === today.d && currentModule.m === today.m && currentModule.y === today.y;
-  const prevMonth = () => {
-    let settingMonth;
-    (currentModule.m - 1 === 0)
-      ? settingMonth = `${currentModule.y - 1} 12`
-      : settingMonth = `${currentModule.y} ${currentModule.m - 1}`;
-    return setDate(new Date(settingMonth));
-  };
-  const nextMonth = () => {
-    let settingMonth;
-    (currentModule.m + 1 === 13)
-      ? settingMonth = `${currentModule.y + 1} 1`
-      : settingMonth = `${currentModule.y} ${currentModule.m + 1}`;
-    return setDate(new Date(settingMonth));
-  };
-  for (let d = 1; d <= lastDay; d++) {
-    dayList.push(d);
-  }
-  for (let e = 1; e <= firstDay; e++) {
-    dayList.unshift('');
+
+export default class Index extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      getToday: new Date(),
+      currentDay: new Date(),
+      week: ['일', '월', '화', '수', '목', '금', '토'],
+      dayList: []
+    };
   }
 
-  React.useEffect(() => {
-  }, []);
+  settingCalendar() {
+    const dayList = [];
+    const currentModule = {
+      y: this.state.currentDay.getFullYear(),
+      m: this.state.currentDay.getMonth() + 1,
+      d: this.state.currentDay.getDate(),
+    };
+    const firstDay = new Date(currentModule.y, currentModule.m - 1, 1).getDay();
+    const lastDay = new Date(currentModule.y, currentModule.m, 0).getDate();
+    for (let d = 1; d <= lastDay; d++) {
+      dayList.push(d);
+    }
+    for (let e = 1; e <= firstDay; e++) {
+      dayList.unshift('');
+    }
+    return [dayList, currentModule];
+  }
 
-  return (
-    <>
-      <div className="calendar-title">
-        <button onClick={prevMonth}>&lt;</button>
-        {currentModule.y}. {currentModule.m}
-        <button onClick={nextMonth}>&gt;</button>
-      </div>
-      <div className="calendar-wrap">
-        <div className="calendar-header">
-          {
-            week.map((item, index) => (
-              <Day key={`${index}-day`} day={item} />
-            ))
-          }
+  todayActive(item) {
+    const today = {
+      y: this.state.getToday.getFullYear(),
+      m: this.state.getToday.getMonth() + 1,
+      d: this.state.getToday.getDate(),
+    };
+    return item === today.d && this.state.currentDay.m === today.m && this.state.currentDay.y === today.y;
+  }
+
+  componentDidMount() {
+    console.log('componentDidMount');
+    const dayItem = this.settingCalendar();
+    this.setState({
+      dayList: dayItem[0],
+      currentDay: dayItem[1]
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('shouldComponentUpdate');
+    return true / false;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate');
+  }
+
+  prevMonth = () => {
+    let settingMonth;
+    (this.state.currentDay.m - 1 === 0)
+      ? settingMonth = `${this.state.currentDay.y - 1} 12`
+      : settingMonth = `${this.state.currentDay.y} ${this.state.currentDay.m - 1}`;
+    let getMonth = new Date(settingMonth);
+    const getModule = {
+      y: getMonth.getFullYear(),
+      m: getMonth.getMonth() + 1,
+      d: getMonth.getDate(),
+    };
+    this.setState(() => ({ currentDay: getModule }));
+  }
+
+  nextMonth = () => {
+    let settingMonth;
+    (this.state.currentDay.m + 1 === 13)
+      ? settingMonth = `${this.state.currentDay.y + 1} 1`
+      : settingMonth = `${this.state.currentDay.y} ${this.state.currentDay.m + 1}`;
+    let getMonth = new Date(settingMonth);
+    const getModule = {
+      y: getMonth.getFullYear(),
+      m: getMonth.getMonth() + 1,
+      d: getMonth.getDate(),
+    };
+    this.setState(() => ({ currentDay: getModule }));
+  }
+
+  render() {
+    return (
+      <>
+        <div className="calendar-title">
+          <button onClick={this.prevMonth}>&lt;</button>
+          {this.state.currentDay.y}. {this.state.currentDay.m}
+          <button onClick={this.nextMonth}>&gt;</button>
         </div>
-        <div className="calendar-body">
-          {
-            dayList.map((item, index) => (
-              <Day key={`${index}-day`} day={item} current={todayActive(item)} />
-            ))
-          }
+        <div className="calendar-wrap">
+          <div className="calendar-header">
+            {
+              this.state.week.map((item, index) => (
+                <Day key={`${index}-day`} day={item} />
+              ))
+            }
+          </div>
+          <div className="calendar-body">
+            {
+              this.state.dayList.map((item, index) => (
+                <Day key={`${index}-day`} day={item} current={this.todayActive(item)} />
+              ))
+            }
+          </div>
         </div>
-      </div>
-    </>
-  );
-};
-
-
-export default Index;
+      </>
+    );
+  }
+}
