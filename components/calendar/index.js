@@ -4,72 +4,71 @@ import Day from '@/calendar/Day';
 export default class Index extends React.Component {
   constructor(props) {
     super(props);
+    const currentDay = new Date();
     this.state = {
       getToday: new Date(),
-      currentDay: new Date(),
+      currentModule: {
+        y: currentDay.getFullYear(),
+        m: currentDay.getMonth() + 1,
+        d: currentDay.getDate(),
+      },
       week: ['일', '월', '화', '수', '목', '금', '토'],
-      dayList: []
+      dayList: [],
     };
   }
 
   componentDidMount() {
-    this.settingCalendar();
+    this.settingCalendar(this.state.currentModule);
   }
 
-  settingCalendar() {
-    const dayItem = this.settingCompute();
-    this.setState({
-      dayList: dayItem[0],
-      currentDay: dayItem[1]
-    });
-  }
-
-  settingCompute() {
+  // eslint-disable-next-line class-methods-use-this
+  settingCompute(current) {
     const dayList = [];
-    const currentModule = {
-      y: this.state.currentDay.getFullYear(),
-      m: this.state.currentDay.getMonth() + 1,
-      d: this.state.currentDay.getDate(),
-    };
-    const firstDay = new Date(currentModule.y, currentModule.m - 1, 1).getDay();
-    const lastDay = new Date(currentModule.y, currentModule.m, 0).getDate();
+    const firstDay = new Date(current.y, current.m - 1, 1).getDay();
+    const lastDay = new Date(current.y, current.m, 0).getDate();
     for (let d = 1; d <= lastDay; d++) {
       dayList.push(d);
     }
     for (let e = 1; e <= firstDay; e++) {
       dayList.unshift('');
     }
-    return [dayList, currentModule];
+    return dayList;
+  }
+
+  settingCalendar(currentModule) {
+    this.setState({ currentModule });
+    const dayItem = this.settingCompute(currentModule);
+    this.setState({
+      dayList: dayItem,
+    });
   }
 
   prevMonth = () => {
     let settingMonth;
-    (this.state.currentDay.m - 1 === 0)
-      ? settingMonth = `${this.state.currentDay.y - 1} 12`
-      : settingMonth = `${this.state.currentDay.y} ${this.state.currentDay.m - 1}`;
+    (this.state.currentModule.m - 1 === 0)
+      ? settingMonth = `${this.state.currentModule.y - 1} 12`
+      : settingMonth = `${this.state.currentModule.y} ${this.state.currentModule.m - 1}`;
     const getMonth = new Date(settingMonth);
     const getModule = {
       y: getMonth.getFullYear(),
       m: getMonth.getMonth() + 1,
       d: getMonth.getDate(),
     };
-    this.setState({ currentDay: getModule });
-    this.settingCalendar();
+    this.settingCalendar(getModule);
   }
 
   nextMonth = () => {
     let settingMonth;
-    (this.state.currentDay.m + 1 === 13)
-      ? settingMonth = `${this.state.currentDay.y + 1} 1`
-      : settingMonth = `${this.state.currentDay.y} ${this.state.currentDay.m + 1}`;
+    (this.state.currentModule.m + 1 === 13)
+      ? settingMonth = `${this.state.currentModule.y + 1} 1`
+      : settingMonth = `${this.state.currentModule.y} ${this.state.currentModule.m + 1}`;
     const getMonth = new Date(settingMonth);
     const getModule = {
       y: getMonth.getFullYear(),
       m: getMonth.getMonth() + 1,
       d: getMonth.getDate(),
     };
-    this.setState({ currentDay: getModule });
-    this.settingCalendar();
+    this.settingCalendar(getModule);
   }
 
   todayActive(item) {
@@ -78,7 +77,7 @@ export default class Index extends React.Component {
       m: this.state.getToday.getMonth() + 1,
       d: this.state.getToday.getDate(),
     };
-    return item === today.d && this.state.currentDay.m === today.m && this.state.currentDay.y === today.y;
+    return item === today.d && this.state.currentModule.m === today.m && this.state.currentModule.y === today.y;
   }
 
   render() {
@@ -86,7 +85,7 @@ export default class Index extends React.Component {
       <>
         <div className="calendar-title">
           <button onClick={this.prevMonth}>&lt;</button>
-          {this.state.currentDay.y}. {this.state.currentDay.m}
+          {this.state.currentModule.y}. {this.state.currentModule.m}
           <button onClick={this.nextMonth}>&gt;</button>
         </div>
         <div className="calendar-wrap">
