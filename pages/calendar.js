@@ -1,7 +1,8 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import '@styles/calendar.scss';
 import CalendarContainer from '@/calendar';
+import '@styles/index.scss';
+import '@styles/calendar.scss';
 
 const Calendar = () => (
   <>

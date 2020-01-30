@@ -26,12 +26,15 @@
   }
 .score-dream{
   font-family: 'S-CoreDream-2ExtraLight';
+  font-size:12px;
 }
 .binggae{
   font-family: 'BinggraeMelona';
+  font-size:12px;
 }
 .namyun{
   font-family: 'KimNamyun', sans-serif;
+  font-size:14px;
 }
 
 .wrap{
@@ -40,14 +43,4 @@
   padding:20px;
   border-radius:10px;
   box-shadow: 0 0 10px rgba($color: #000000, $alpha: 0.2);
-}
-
-.text-diary{
-    min-height:300px;
-    padding:14px;
-    border:1px solid #ddd;
-    background: url('~/static/images/text-diray.png') repeat 0 12px;
-    color:#999;
-    font-size:14px;
-    line-height:27px;
 }
